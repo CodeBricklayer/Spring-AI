@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: ai-learn
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      chat:
+        model: qwen3.6-plus
+      embedding:
+        model: text-embedding-v4
+        # 向量维度
+        dimensions: 2048
+
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3.5:4b
+
+    model:
+      embedding: openai
+    vectorstore:
+      redis:
+        initialize-schema: true # 是否在启动时创建/初始化向量索引等结构
+        index-name: tp_ai_vector_index # RedisSearch里的索引名
+        prefix: tp_ # 从向量文档用的Redis键前缀
+    mcp:
+      client:
+        enabled: true
+        type: sync
+        # 与mcp-server一致：须先启动mcp-server(默认 http://localhost:8888)
+        sse:
+          connections:
+            mcp-weather:
+              url: http://localhost:8888
+  data:
+    redis:
+      client-type: jedis
+      url: redis://localhost:6380
+
+
+logging:
+  level:
+    org.springframework.ai: debug

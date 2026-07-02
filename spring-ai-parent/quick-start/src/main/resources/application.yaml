@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: quick-start
+  ai:
+    deepseek:
+      api-key: ${DEEP_SEEK_KEY}
+      chat:
+        model: deepseek-chat
+        # 温度 0-2 浮点数值 数值越高 更有创造性 热情 数值越低 保守
+        temperature: 0.8
+

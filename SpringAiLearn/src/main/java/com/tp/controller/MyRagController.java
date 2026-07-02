@@ -54,10 +54,10 @@ public class MyRagController {
      */
     @RequestMapping("/addDocs")
     public String addDocs() {
-        addChunkedDocument("D:\\files\\own\\code\\helloworld\\upload\\tp.docx", "百度简介.docx");
-        addChunkedDocument("D:\\files\\own\\code\\helloworld\\upload\\tp.md", "哔哩哔哩简介.md");
-        addChunkedDocument("D:\\files\\own\\code\\helloworld\\upload\\tp.pdf", "腾讯简介.pdf");
-        addChunkedDocument("D:\\files\\own\\code\\helloworld\\upload\\tp.txt", "java学习.txt");
+        addChunkedDocument("D:\\files\\own\\code\\SpringAiLearn\\SpringAiLearn\\upload\\tp.docx", "百度简介.docx");
+        addChunkedDocument("D:\\files\\own\\code\\SpringAiLearn\\SpringAiLearn\\upload\\tp.md", "哔哩哔哩简介.md");
+        addChunkedDocument("D:\\files\\own\\code\\SpringAiLearn\\SpringAiLearn\\upload\\tp.pdf", "腾讯简介.pdf");
+        addChunkedDocument("D:\\files\\own\\code\\SpringAiLearn\\SpringAiLearn\\upload\\tp.txt", "java学习.txt");
         return "OK";
     }
 

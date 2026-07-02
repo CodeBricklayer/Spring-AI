@@ -34,7 +34,7 @@ public class MyMultimodalityController {
         String result = chatClient.prompt()
                 .user(u->
                         u.text("请详细描述这张图片的内容，包含物体、颜色、场景和可能得用途")
-                                .media(MediaType.IMAGE_JPEG,new FileSystemResource("D:\\files\\own\\code\\helloworld\\upload\\Apple.jpg")))
+                                .media(MediaType.IMAGE_JPEG,new FileSystemResource("D:\\files\\own\\code\\SpringAiLearn\\SpringAiLearn\\upload\\Apple.jpg")))
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, "default"))
                 .call()
                 .content();

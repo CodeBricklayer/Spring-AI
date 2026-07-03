@@ -1,5 +1,6 @@
 package com.tp.springai.aicodehelper.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version V4.0
  * @since 2026/7/3 10:25
  */
+@Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
     @Override

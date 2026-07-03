@@ -1,5 +1,7 @@
 # CUSTOM
 application-local.yml
+ai-code-helper-frontend/node_modules
+ai-code-helper-frontend/dist
 
 HELP.md
 target/

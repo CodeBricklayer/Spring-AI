@@ -9,24 +9,24 @@ import org.springframework.stereotype.Component;
 
 /**
  * 包名称：com.tp.springai.aiagent.demo.invoke
- * 类名称：SpringAiAlibabaAiInvoke
- * 类描述：阿里云灵积AI Spring Ai Alibaba调用
+ * 类名称：OllamaAiInvoke
+ * 类描述：Spring AI 框架调用AI大模型（阿里）
  *
  * @author tanpeng
  * @version V4.0
- * @since 2026/7/3 16:01
+ * @since 2026/7/3 17:24
  */
-//@Component
-public class SpringAiAlibabaAiInvoke implements CommandLineRunner {
+@Component
+public class OllamaAiInvoke implements CommandLineRunner {
 
     @Resource
-    private ChatModel dashScopeChatModel;
+    private ChatModel ollamaChatModel;
 
     @Override
     public void run(String... args) {
-        AssistantMessage message = dashScopeChatModel.call(new Prompt("你好，我是java程序员"))
+        AssistantMessage assistantMessage = ollamaChatModel.call(new Prompt("你好，我是一名java程序员"))
                 .getResult()
                 .getOutput();
-        System.out.println(message.getText());
+        System.out.println(assistantMessage.getText());
     }
 }

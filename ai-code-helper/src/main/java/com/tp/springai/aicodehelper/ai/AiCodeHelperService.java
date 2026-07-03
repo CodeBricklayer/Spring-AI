@@ -1,6 +1,12 @@
 package com.tp.springai.aicodehelper.ai;
 
+import com.tp.springai.aicodehelper.ai.guardrail.SafeInputGuardrail;
+import dev.langchain4j.service.MemoryId;
+import dev.langchain4j.service.Result;
 import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.guardrail.InputGuardrails;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -14,6 +20,7 @@ import java.util.List;
  * @since 2026/7/2 16:33
  */
 //@AiService
+@InputGuardrails(SafeInputGuardrail.class)
 public interface AiCodeHelperService {
 
     /**
@@ -37,4 +44,23 @@ public interface AiCodeHelperService {
     // 学习报告
     record Report(String name, List<String> suggestionList) {
     }
+
+    /**
+     * 简单对话-依据知识库问答
+     *
+     * @param userMessage 用户消息
+     * @return 返回封装后的结果
+     */
+    @SystemMessage(fromResource = "system-prompt.txt")
+    Result<String> chatWithRag(String userMessage);
+
+    /**
+     * 简单对话-流式输出对话
+     *
+     * @param memoryId    会话id
+     * @param userMessage 用户消息
+     * @return 流式输出
+     */
+    @SystemMessage(fromResource = "system-prompt.txt")
+    Flux<String> chatStream(@MemoryId int memoryId, @UserMessage String userMessage);
 }

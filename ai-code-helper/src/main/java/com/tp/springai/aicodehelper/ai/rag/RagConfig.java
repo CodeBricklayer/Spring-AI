@@ -9,7 +9,6 @@ import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
-import dev.langchain4j.store.embedding.IngestionResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,10 +36,10 @@ public class RagConfig {
     public ContentRetriever contentRetriever() {
         // ---------RAG--------
         // 1.加载文档
-        List<Document> documents = FileSystemDocumentLoader.loadDocuments("/src/main/resources/docs");
+        List<Document> documents = FileSystemDocumentLoader.loadDocuments("D:\\files\\own\\code\\SpringAiLearn\\ai-code-helper\\src\\main\\resources\\docs");
         // 2.文档切割：每个文档按照段落进行分割，最大1000个字符，每次最多重叠200个字符
         DocumentByParagraphSplitter documentByParagraphSplitter =
-                new DocumentByParagraphSplitter(1000, 200);
+                new DocumentByParagraphSplitter(5000, 200);
 
         // 3.自定义文档加载器，把文档转换成向量并保存到向量数据库中
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
@@ -54,7 +53,7 @@ public class RagConfig {
                 .embeddingStore(embeddingStore)
                 .build();
         // 加载文档
-        IngestionResult ingest = ingestor.ingest(documents);
+       ingestor.ingest(documents);
         // 4.自定义内容加载器
         return EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)

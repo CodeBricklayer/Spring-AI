@@ -10,7 +10,7 @@ langchain4j:
         api-key: ${OPENAI_API_KEY}
       embedding-model:
         api-key: ${OPENAI_API_KEY}
-        model-name: text-embedding-v4
+        model-name: text-embedding-v3
       streaming-chat-model:
         model-name: qwen-max
         api-key: ${OPENAI_API_KEY}

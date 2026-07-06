@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @version V4.0
  * @since 2026/7/3 17:24
  */
-@Component
+//@Component
 public class OllamaAiInvoke implements CommandLineRunner {
 
     @Resource

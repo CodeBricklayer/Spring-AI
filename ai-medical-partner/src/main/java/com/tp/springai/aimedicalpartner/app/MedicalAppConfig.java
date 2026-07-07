@@ -2,6 +2,13 @@ package com.tp.springai.aimedicalpartner.app;
 
 import com.tp.springai.aimedicalpartner.advisor.MyLoggerAdvisor;
 import com.tp.springai.aimedicalpartner.chatmemory.FileBasedChatMemory;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
+import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
+import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -31,8 +38,37 @@ public class MedicalAppConfig {
 
     private volatile String systemPrompt;
 
+    /**
+     * AI 医疗助手知识库问答功能
+     */
+    @jakarta.annotation.Resource
+    private VectorStore medicalAppVectorStore;
+
     public MedicalAppConfig(@Value("classpath:prompts/system-message.st") Resource systemPromptResource) {
         this.systemPromptResource = systemPromptResource;
+    }
+
+    @Bean
+    public RetrievalAugmentationAdvisor retrievalAugmentationAdvisor() {
+        return RetrievalAugmentationAdvisor.builder()
+                .documentRetriever(VectorStoreDocumentRetriever.builder()
+                        .similarityThreshold(0.50)
+                        .vectorStore(medicalAppVectorStore)
+                        .build())
+                .queryAugmenter(ContextualQueryAugmenter.builder()
+                        .allowEmptyContext(true)
+                        .build())
+                .build();
+    }
+
+    @Bean
+    public QuestionAnswerAdvisor qaAdvisor() {
+        return QuestionAnswerAdvisor.builder(medicalAppVectorStore)
+                .searchRequest(SearchRequest.builder()
+                        // 搜索结果数量
+                        .topK(3)
+                        // 相似度阈值0-1 值越大要求越严格 过滤低相关性的结果，提高RAG的回答质量
+                        .similarityThreshold(0.7).build()).build();
     }
 
     @Bean

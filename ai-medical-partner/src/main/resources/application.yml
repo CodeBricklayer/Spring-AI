@@ -8,6 +8,20 @@ spring:
       chat:
         model: qwen3.6-plus
       embedding:
-        model: text-embedding-v3
+        batchSize: 10
+        model: gte-rerank-v2
         # 向量维度
-        dimensions: 2048
+        dimensions: 1024
+
+    model:
+      embedding: openai
+    vectorstore:
+      redis:
+        initialize-schema: true # 是否在启动时创建/初始化向量索引等结构
+        index-name: tp_ai_medical_vector_index # RedisSearch里的索引名
+        prefix: medical_ # 从向量文档用的Redis键前缀
+
+  data:
+    redis:
+      client-type: jedis
+      url: redis://localhost:6380

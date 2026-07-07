@@ -33,4 +33,10 @@ class MedicalAppTest {
         MedicalApp.MedicalReport medicalReport = medicalApp.doChatWithReport("你好，我是程序员谭鹏,我现在有点咳嗽，但我不知道该怎么做", chatId);
         Assertions.assertNotNull(medicalReport);
     }
+
+    @Test
+    void testChatWithRag() {
+        String chatId = UUID.randomUUID().toString();
+        System.out.println(medicalApp.doChatWithRag("心肌病患者的自我管理要点是什么？", chatId));
+    }
 }

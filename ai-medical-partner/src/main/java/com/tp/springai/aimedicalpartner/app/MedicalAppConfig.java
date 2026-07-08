@@ -6,9 +6,13 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
+import org.springframework.ai.rag.preretrieval.query.expansion.MultiQueryExpander;
+import org.springframework.ai.rag.preretrieval.query.transformation.QueryTransformer;
+import org.springframework.ai.rag.preretrieval.query.transformation.RewriteQueryTransformer;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -114,5 +118,32 @@ public class MedicalAppConfig {
         } catch (IOException e) {
             throw new IllegalStateException("Failed to read prompts/system-message.st", e);
         }
+    }
+
+    /**
+     * 查询扩展器：在多轮会话场景中，用户输入的提示词‌有时可能不够完整，或者存在歧义。多查询扩展技术可以扩大检索范围，提‌高相关文档的召回率。
+     *
+     * @param ollamaChatModel 模型
+     * @return 查询扩展器
+     */
+    @Bean
+    public MultiQueryExpander multiQueryExpanderDemo(ChatModel ollamaChatModel) {
+        return MultiQueryExpander.builder()
+                .chatClientBuilder(ChatClient.builder(ollamaChatModel))
+                .numberOfQueries(3)
+                .build();
+    }
+
+    /**
+     * 查询重写器：查询重写可以使查询更加‌精确和专业，但是注意保持查询的语义完整性。
+     *
+     * @param ollamaChatModel 模型
+     * @return 查询重写器
+     */
+    @Bean
+    public QueryTransformer queryTransformer(ChatModel ollamaChatModel) {
+        return RewriteQueryTransformer.builder()
+                .chatClientBuilder(ChatClient.builder(ollamaChatModel))
+                .build();
     }
 }

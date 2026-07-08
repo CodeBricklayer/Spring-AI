@@ -2,6 +2,8 @@ package com.tp.springai.aimedicalpartner.app;
 
 import com.tp.springai.aimedicalpartner.advisor.MyLoggerAdvisor;
 import com.tp.springai.aimedicalpartner.rag.MedicalAppDocumentLoader;
+import com.tp.springai.aimedicalpartner.rag.MyKeywordEnricher;
+import com.tp.springai.aimedicalpartner.rag.QueryRewriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -39,6 +41,10 @@ public class MedicalApp {
     private final VectorStore vectorStore;
 
     private final MedicalAppDocumentLoader medicalAppDocumentLoader;
+
+    private final MyKeywordEnricher myKeywordEnricher;
+
+    private final QueryRewriter queryRewriter;
 
     /**
      * AI 基础对话（支持多轮对话记忆）
@@ -83,7 +89,7 @@ public class MedicalApp {
      * 文件加载到向量数据库中
      */
     public void loadDoc() {
-        vectorStore.add(medicalAppDocumentLoader.loadJson());
+        vectorStore.add(myKeywordEnricher.enrichDocuments(medicalAppDocumentLoader.loadJson()));
     }
 
     /**
@@ -95,7 +101,8 @@ public class MedicalApp {
      */
     public String doChatWithRag(String message, String chatId) {
         return client.prompt()
-                .user(message)
+                //查询重写并使用改写后的查询
+                .user(queryRewriter.doQueryRewrite(message))
                 .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, chatId))
                 // 应用 RAG 知识库问答
                 .advisors(vectorStoreDocumentRetriever)

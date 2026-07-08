@@ -1,12 +1,14 @@
 package com.tp.springai.aimedicalpartner.app;
 
 import com.tp.springai.aimedicalpartner.advisor.MyLoggerAdvisor;
+import com.tp.springai.aimedicalpartner.rag.MedicalAppDocumentLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,6 +35,10 @@ public class MedicalApp {
     private final MedicalAppConfig medicalAppConfig;
 
     private final RetrievalAugmentationAdvisor vectorStoreDocumentRetriever;
+
+    private final VectorStore vectorStore;
+
+    private final MedicalAppDocumentLoader medicalAppDocumentLoader;
 
     /**
      * AI 基础对话（支持多轮对话记忆）
@@ -71,6 +77,13 @@ public class MedicalApp {
                 .call().entity(MedicalReport.class);
         log.info("MedicalReport:{}", medicalReport);
         return medicalReport;
+    }
+
+    /**
+     * 文件加载到向量数据库中
+     */
+    public void loadDoc() {
+        vectorStore.add(medicalAppDocumentLoader.loadJson());
     }
 
     /**

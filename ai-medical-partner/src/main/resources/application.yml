@@ -9,7 +9,7 @@ spring:
         model: qwen3.6-plus
       embedding:
         batchSize: 10
-        model: gte-rerank-v2
+        model: text-embedding-v1
         # 向量维度
         dimensions: 1024
 

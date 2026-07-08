@@ -1,22 +1,21 @@
 package com.tp.springai.aimedicalpartner.rag;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.reader.JsonMetadataGenerator;
+import org.springframework.ai.reader.JsonReader;
 import org.springframework.ai.reader.markdown.MarkdownDocumentReader;
 import org.springframework.ai.reader.markdown.config.MarkdownDocumentReaderConfig;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 包名称：com.tp.springai.aimedicalpartner.rag
@@ -33,8 +32,6 @@ import java.util.List;
 public class MedicalAppDocumentLoader {
 
     private final ResourcePatternResolver resolver;
-
-    private final List<KnowledgeParser> parsers;
 
     /**
      * 加载多篇 Markdown 文档
@@ -75,58 +72,17 @@ public class MedicalAppDocumentLoader {
         try {
             Resource[] resources = resolver.getResources("classpath:docs/*.json");
             for (Resource resource : resources) {
-
-                ObjectMapper objectMapper = new ObjectMapper();
-
-                String content =
-                        Files.readString(
-                                resource.getFile().toPath()
-                        ).trim();
-
-                JsonNode root = objectMapper.readTree(resource.getInputStream());
-
-                List<JsonNode> nodes = new ArrayList<>();
-
-
-                // JSON数组
-                if (content.startsWith("[")) {
-
-                    ArrayNode array =
-                            (ArrayNode) objectMapper.readTree(content);
-
-                    array.forEach(nodes::add);
-
-                }
-                // JSONL
-                else {
-
-                    try (BufferedReader reader =
-                                 Files.newBufferedReader(
-                                         resource.getFile().toPath()
-                                 )) {
-
-                        String line;
-
-                        while ((line = reader.readLine()) != null) {
-
-                            if (!line.isBlank()) {
-
-                                nodes.add(
-                                        objectMapper.readTree(line)
-                                );
-                            }
-                        }
-                    }
-                }
-
-                List<Document> result = new ArrayList<>();
                 String filename = resource.getFilename();
-                for (JsonNode node : nodes) {
-                    KnowledgeParser parser = parsers.stream().filter(p -> p.support(node)).findFirst().orElseThrow(() -> new RuntimeException("未知JSON格式"));
-                    result.add(parser.parse(node, filename));
+                if (filename != null) {
+                    JsonMetadataGenerator jsonMetadataGenerator = new JsonMetadataGenerator() {
+                        @Override
+                        public @NonNull Map<String, Object> generate(@NonNull Map<String, Object> jsonMap) {
+                            return Map.of("filename", filename);
+                        }
+                    };
+                    JsonReader reader = new JsonReader(resource, jsonMetadataGenerator);
+                    allDocuments.addAll(reader.get());
                 }
-
-                allDocuments.addAll(result);
             }
         } catch (IOException e) {
             log.error("Error loading Json Documents", e);

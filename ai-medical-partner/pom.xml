@@ -49,6 +49,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jsonassert</artifactId>
+                    <groupId>org.skyscreamer</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--支持结构化输出-->

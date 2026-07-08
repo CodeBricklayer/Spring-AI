@@ -2,26 +2,31 @@ spring:
   application:
     name: ai-medical-partner
   ai:
-    openai:
-      api-key: ${OPENAI_API_KEY}
-      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
-      chat:
-        model: qwen3.6-plus
-      embedding:
-        batchSize: 10
-        model: text-embedding-v1
-        # 向量维度
-        dimensions: 1024
-
-    model:
-      embedding: openai
     vectorstore:
-      redis:
-        initialize-schema: true # 是否在启动时创建/初始化向量索引等结构
-        index-name: tp_ai_medical_vector_index # RedisSearch里的索引名
-        prefix: medical_ # 从向量文档用的Redis键前缀
+#      redis:
+#        initialize-schema: true # 是否在启动时创建/初始化向量索引等结构
+#        index-name: tp_ai_medical_vector_index # RedisSearch里的索引名
+#        prefix: medical_ # 从向量文档用的Redis键前缀
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 1536
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3.5:4b
+      embedding:
+        model: qwen3-embedding:4b
+    model:
+      embedding: ollama
+  #
+#  data:
+#    redis:
+#      client-type: jedis
+#      url: redis://localhost:6380
 
-  data:
-    redis:
-      client-type: jedis
-      url: redis://localhost:6380
+  datasource:
+      url: jdbc:postgresql://localhost:15432/ai_medical_agent
+      username: postgres
+      password: 123456

@@ -6,7 +6,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
@@ -41,7 +41,7 @@ public class MedicalAppConfig {
      * AI 医疗助手知识库问答功能
      */
     @jakarta.annotation.Resource
-    private VectorStore medicalAppVectorStore;
+    private VectorStore vectorStore;
 
     public MedicalAppConfig(@Value("classpath:prompts/system-message.st") Resource systemPromptResource) {
         this.systemPromptResource = systemPromptResource;
@@ -52,7 +52,7 @@ public class MedicalAppConfig {
         return RetrievalAugmentationAdvisor.builder()
                 .documentRetriever(VectorStoreDocumentRetriever.builder()
                         .similarityThreshold(0.50)
-                        .vectorStore(medicalAppVectorStore)
+                        .vectorStore(vectorStore)
                         .build())
                 .queryAugmenter(ContextualQueryAugmenter.builder()
                         .allowEmptyContext(true)
@@ -62,7 +62,7 @@ public class MedicalAppConfig {
 
     @Bean
     public QuestionAnswerAdvisor qaAdvisor() {
-        return QuestionAnswerAdvisor.builder(medicalAppVectorStore)
+        return QuestionAnswerAdvisor.builder(vectorStore)
                 .searchRequest(SearchRequest.builder()
                         // 搜索结果数量
                         .topK(3)
@@ -91,7 +91,7 @@ public class MedicalAppConfig {
     }
 
     @Bean
-    public ChatClient chatClient(OpenAiChatModel model, ChatMemory chatMemory) {
+    public ChatClient chatClient(OllamaChatModel model, ChatMemory chatMemory) {
         return ChatClient
                 // 创建ChatClient对象，以及设置模型为model
                 .builder(model)

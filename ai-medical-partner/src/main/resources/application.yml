@@ -3,6 +3,7 @@ spring:
     name: ai-medical-partner
   ai:
     vectorstore:
+
 #      redis:
 #        initialize-schema: true # 是否在启动时创建/初始化向量索引等结构
 #        index-name: tp_ai_medical_vector_index # RedisSearch里的索引名
@@ -10,14 +11,16 @@ spring:
       pgvector:
         index-type: HNSW
         distance-type: COSINE_DISTANCE
-        dimensions: 1536
+        dimensions: 1024
         max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+        initialize-schema: true
+
     ollama:
       base-url: http://localhost:11434
       chat:
         model: qwen3.5:4b
       embedding:
-        model: qwen3-embedding:4b
+        model: bge-m3
     model:
       embedding: ollama
   #
@@ -30,3 +33,7 @@ spring:
       url: jdbc:postgresql://localhost:15432/ai_medical_agent
       username: postgres
       password: 123456
+server:
+  port: 8123
+  servlet:
+    context-path: /api

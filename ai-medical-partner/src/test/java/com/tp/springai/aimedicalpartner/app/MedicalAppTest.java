@@ -39,4 +39,11 @@ class MedicalAppTest {
         String chatId = UUID.randomUUID().toString();
         System.out.println(medicalApp.doChatWithRag("心肌病患者的自我管理要点是什么？", chatId));
     }
+
+
+
+    @Test
+    void loadDoc() {
+        medicalApp.loadDoc();
+    }
 }

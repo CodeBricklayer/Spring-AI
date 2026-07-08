@@ -97,8 +97,6 @@ public class MedicalApp {
         return client.prompt()
                 .user(message)
                 .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, chatId))
-                //开启日志，便于观察效果
-                .advisors(new MyLoggerAdvisor())
                 // 应用 RAG 知识库问答
                 .advisors(vectorStoreDocumentRetriever)
                 .call()

@@ -36,16 +36,6 @@
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-openai</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
@@ -56,14 +46,25 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!--支持结构化输出-->
         <dependency>
-            <groupId>com.github.victools</groupId>
-            <artifactId>jsonschema-generator</artifactId>
-            <version>5.0.0</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
 
+        <!--引入openai依赖-->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
+        </dependency>
+        <!--引入 ollama 依赖-->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-ollama</artifactId>
+        </dependency>
+
+
+        <!--引入会话记忆依赖-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-chat-memory</artifactId>
@@ -75,73 +76,84 @@
             <artifactId>kryo</artifactId>
             <version>5.6.2</version>
         </dependency>
+
+        <!--支持结构化输出-->
+        <dependency>
+            <groupId>com.github.victools</groupId>
+            <artifactId>jsonschema-generator</artifactId>
+            <version>5.0.0</version>
+        </dependency>
+
         <!--pdf文件读取加载器-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-pdf-document-reader</artifactId>
         </dependency>
+
         <!--markdown文件读取加载器-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-markdown-document-reader</artifactId>
         </dependency>
+
         <!--文件读取加载器-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-tika-document-reader</artifactId>
         </dependency>
+
         <!--网页加载器-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-jsoup-document-reader</artifactId>
         </dependency>
+
+        <!--引入基础向量存储依赖-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-vector-store</artifactId>
         </dependency>
 
+        <!--引入顾问器依赖-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-vector-store-advisor</artifactId>
         </dependency>
 
+        <!--引入知识库依赖-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-rag</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.ai</groupId>-->
-<!--            <artifactId>spring-ai-starter-vector-store-redis</artifactId>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash;-->
-<!--            Spring AI RedisVectorStoreAutoConfiguration仅在存在 JedisConnectionFactory时生效（不用Lettuce）-->
-<!--            因此改用 Jedis，并从starter中排除Lettuce。-->
-<!--        &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>io.lettuce</groupId>-->
-<!--                    <artifactId>lettuce-core</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.ai</groupId>-->
+        <!--            <artifactId>spring-ai-starter-vector-store-redis</artifactId>-->
+        <!--        </dependency>-->
+        <!--        &lt;!&ndash;-->
+        <!--            Spring AI RedisVectorStoreAutoConfiguration仅在存在 JedisConnectionFactory时生效（不用Lettuce）-->
+        <!--            因此改用 Jedis，并从starter中排除Lettuce。-->
+        <!--        &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>io.lettuce</groupId>-->
+        <!--                    <artifactId>lettuce-core</artifactId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>redis.clients</groupId>-->
-<!--            <artifactId>jedis</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>redis.clients</groupId>-->
+        <!--            <artifactId>jedis</artifactId>-->
+        <!--        </dependency>-->
 
+        <!--整合 PGVector向量数据库-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-vector-store-pgvector</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-ollama</artifactId>
         </dependency>
     </dependencies>
     <dependencyManagement>

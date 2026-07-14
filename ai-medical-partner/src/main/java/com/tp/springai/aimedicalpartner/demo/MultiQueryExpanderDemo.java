@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MultiQueryExpanderDemo {
 
-    private final QueryExpander multiQueryExpanderDemo;
+    private final QueryExpander myMultiQueryExpander;
 
     /**
      * 扩展查询语句
@@ -29,7 +29,7 @@ public class MultiQueryExpanderDemo {
      * @return 扩展后的查询语句列表
      */
     public List<Query> expand(String query) {
-        return multiQueryExpanderDemo.expand(new Query(query));
+        return myMultiQueryExpander.expand(new Query(query));
     }
 
 }

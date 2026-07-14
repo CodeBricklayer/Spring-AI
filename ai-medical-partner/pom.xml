@@ -11,8 +11,8 @@
     <groupId>com.tp.springai</groupId>
     <artifactId>ai-medical-partner</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ai-romantic-partner</name>
-    <description>ai-romantic-partner</description>
+    <name>ai-medical-partner</name>
+    <description>ai-medical-partner</description>
     <url/>
     <licenses>
         <license/>
@@ -154,6 +154,12 @@
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-vector-store-pgvector</artifactId>
+        </dependency>
+        <!--引入hutool工具类-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.46</version>
         </dependency>
     </dependencies>
     <dependencyManagement>

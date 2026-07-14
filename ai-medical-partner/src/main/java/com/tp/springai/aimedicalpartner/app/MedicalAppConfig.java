@@ -127,7 +127,7 @@ public class MedicalAppConfig {
      * @return 查询扩展器
      */
     @Bean
-    public MultiQueryExpander multiQueryExpanderDemo(ChatModel ollamaChatModel) {
+    public MultiQueryExpander myMultiQueryExpander(ChatModel ollamaChatModel) {
         return MultiQueryExpander.builder()
                 .chatClientBuilder(ChatClient.builder(ollamaChatModel))
                 .numberOfQueries(3)

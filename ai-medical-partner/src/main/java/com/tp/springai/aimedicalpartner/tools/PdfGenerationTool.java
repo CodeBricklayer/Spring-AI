@@ -24,7 +24,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class PdfGenerationTool implements AiTool {
 
-    @Tool(description = "Generate a PDF file with given content")
+    /**
+     * 生成PDF
+     * returnDirect：true 立即返回结果，不需要传给模型
+     * @param fileName 文件名称
+     * @param content  文件内容
+     * @return 结果
+     */
+    @Tool(description = "Generate a PDF file with given content", returnDirect = true)
     public String generatePdf(
             @ToolParam(description = "Name of the file to save the generate PDF") String fileName,
             @ToolParam(description = "Content to be included in the PDF") String content) {

@@ -161,6 +161,20 @@
             <artifactId>hutool-all</artifactId>
             <version>5.8.46</version>
         </dependency>
+        <!--PDF生成库-->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext-core</artifactId>
+            <version>9.1.0</version>
+            <type>pom</type>
+        </dependency>
+        <!--PDF字体库-->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>font-asian</artifactId>
+            <version>9.1.0</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>

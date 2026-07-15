@@ -1,12 +1,12 @@
 package com.tp.springai.aimedicalpartner.tools;
 
-import cn.hutool.core.io.FileUtil;
 import org.springframework.ai.reader.jsoup.JsoupDocumentReader;
 import org.springframework.ai.reader.jsoup.config.JsoupDocumentReaderConfig;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -19,7 +19,8 @@ import java.util.List;
  * @version V4.0
  * @since 2026/7/10 17:49
  */
-public class WebScrapingTool {
+@Component
+public class WebScrapingTool implements AiTool{
 
     @Tool(description = "This is a tool for scraping web page information.")
     public String scrapingWeb(@ToolParam(description = "URLs from which web information needs to be scraped.") String url) {

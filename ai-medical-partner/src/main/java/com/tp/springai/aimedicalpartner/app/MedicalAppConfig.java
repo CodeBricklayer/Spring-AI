@@ -2,6 +2,7 @@ package com.tp.springai.aimedicalpartner.app;
 
 import com.tp.springai.aimedicalpartner.advisor.MyLoggerAdvisor;
 import com.tp.springai.aimedicalpartner.chatmemory.FileBasedChatMemory;
+import com.tp.springai.aimedicalpartner.tools.AiTool;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
@@ -24,6 +25,7 @@ import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * 包名称：com.tp.springai.aimedicalpartner.app
@@ -40,7 +42,6 @@ public class MedicalAppConfig {
     private final Resource systemPromptResource;
 
     private volatile String systemPrompt;
-
     /**
      * AI 医疗助手知识库问答功能
      */
@@ -95,7 +96,8 @@ public class MedicalAppConfig {
     }
 
     @Bean
-    public ChatClient chatClient(OllamaChatModel model, ChatMemory chatMemory) {
+    public ChatClient chatClient(OllamaChatModel model, ChatMemory chatMemory,
+                                 List<AiTool> tools) {
         return ChatClient
                 // 创建ChatClient对象，以及设置模型为model
                 .builder(model)
@@ -109,6 +111,7 @@ public class MedicalAppConfig {
                         // 自定义推理增强 Advisor，可按需开启
 //                        , new MyReReadingAdvisor()
                 )
+                .defaultTools(tools.toArray())
                 .build();
     }
 

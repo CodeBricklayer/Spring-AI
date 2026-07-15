@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import com.tp.springai.aimedicalpartner.constant.FileConstant;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.stereotype.Component;
 
 /**
  * 包名称：com.tp.springai.aimedicalpartner.tools
@@ -14,7 +15,8 @@ import org.springframework.ai.tool.annotation.ToolParam;
  * @version V4.0
  * @since 2026/7/10 10:10
  */
-public class FileOperationTool {
+@Component
+public class FileOperationTool implements AiTool {
 
     private final String FILE_DIR = FileConstant.FILE_SAVE_DIR + "/file";
 

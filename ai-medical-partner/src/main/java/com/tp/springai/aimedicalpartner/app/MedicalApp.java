@@ -1,6 +1,5 @@
 package com.tp.springai.aimedicalpartner.app;
 
-import com.tp.springai.aimedicalpartner.advisor.MyLoggerAdvisor;
 import com.tp.springai.aimedicalpartner.rag.MedicalAppDocumentLoader;
 import com.tp.springai.aimedicalpartner.rag.MyKeywordEnricher;
 import com.tp.springai.aimedicalpartner.rag.QueryRewriter;
@@ -110,4 +109,21 @@ public class MedicalApp {
                 .content();
     }
 
+    /**
+     * 和 RAG 知识库进行对话
+     *
+     * @param message 用户消息
+     * @param chatId  会话ID
+     * @return 问答结果
+     */
+    public String doChatWithTools(String message, String chatId) {
+        return client.prompt()
+                //查询重写并使用改写后的查询
+                .user(queryRewriter.doQueryRewrite(message))
+                .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, chatId))
+                // 应用 RAG 知识库问答
+                .advisors(vectorStoreDocumentRetriever)
+                .call()
+                .content();
+    }
 }

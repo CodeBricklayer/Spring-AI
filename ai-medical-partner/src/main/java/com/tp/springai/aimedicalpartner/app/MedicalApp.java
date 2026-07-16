@@ -31,7 +31,9 @@ public class MedicalApp {
 
     private static final String REPORT_PROMPT_SUFFIX = "每次对话后都要生成医疗结果，标题为{用户名}的医疗报告，内容为问答列表";
 
-    private final ChatClient client;
+    private final ChatClient chatClient;
+
+    private final ChatClient chatClientWithMcp;
 
     private final MedicalAppConfig medicalAppConfig;
 
@@ -54,7 +56,7 @@ public class MedicalApp {
      */
     public String doChat(String message, String chatId) {
 
-        ChatResponse chatResponse = client.prompt()
+        ChatResponse chatResponse = chatClient.prompt()
                 .user(message)
                 .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, chatId))
                 .call().chatResponse();
@@ -75,7 +77,7 @@ public class MedicalApp {
      * @return 医疗报告
      */
     public MedicalReport doChatWithReport(String message, String chatId) {
-        MedicalReport medicalReport = client.prompt()
+        MedicalReport medicalReport = chatClient.prompt()
                 .system(medicalAppConfig.systemPrompt() + REPORT_PROMPT_SUFFIX)
                 .user(message)
                 .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, chatId))
@@ -99,7 +101,7 @@ public class MedicalApp {
      * @return 问答结果
      */
     public String doChatWithRag(String message, String chatId) {
-        return client.prompt()
+        return chatClient.prompt()
                 //查询重写并使用改写后的查询
                 .user(queryRewriter.doQueryRewrite(message))
                 .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, chatId))
@@ -117,12 +119,28 @@ public class MedicalApp {
      * @return 问答结果
      */
     public String doChatWithTools(String message, String chatId) {
-        return client.prompt()
+        return chatClient.prompt()
                 //查询重写并使用改写后的查询
                 .user(queryRewriter.doQueryRewrite(message))
                 .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, chatId))
                 // 应用 RAG 知识库问答
                 .advisors(vectorStoreDocumentRetriever)
+                .call()
+                .content();
+    }
+
+    /**
+     * 调用MCP服务
+     *
+     * @param message 用户消息
+     * @param chatId  会话ID
+     * @return 问答结果
+     */
+    public String doChatWithMcp(String message, String chatId) {
+        return chatClientWithMcp.prompt()
+                //查询重写并使用改写后的查询
+                .user(message)
+                .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, chatId))
                 .call()
                 .content();
     }

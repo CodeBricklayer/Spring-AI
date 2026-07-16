@@ -23,6 +23,17 @@ spring:
         model: bge-m3
     model:
       embedding: ollama
+    mcp:
+      client:
+        stdio:
+          servers-configuration: classpath:mcp-server.json
+        streamable-http:
+          connections:
+            server1:
+              url: http://localhost:8127
+            server2:
+              url: http://localhost:8888
+
   #
 #  data:
 #    redis:

@@ -15,6 +15,7 @@ import org.springframework.ai.rag.preretrieval.query.expansion.MultiQueryExpande
 import org.springframework.ai.rag.preretrieval.query.transformation.QueryTransformer;
 import org.springframework.ai.rag.preretrieval.query.transformation.RewriteQueryTransformer;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,6 +48,9 @@ public class MedicalAppConfig {
      */
     @jakarta.annotation.Resource
     private VectorStore vectorStore;
+
+    @jakarta.annotation.Resource
+    private ToolCallbackProvider toolCallbackProvider;
 
     public MedicalAppConfig(@Value("classpath:prompts/system-message.st") Resource systemPromptResource) {
         this.systemPromptResource = systemPromptResource;
@@ -147,6 +151,23 @@ public class MedicalAppConfig {
     public QueryTransformer queryTransformer(ChatModel ollamaChatModel) {
         return RewriteQueryTransformer.builder()
                 .chatClientBuilder(ChatClient.builder(ollamaChatModel))
+                .build();
+    }
+
+
+    /**
+     * 会话客户端（使用MCP服务）
+     *
+     * @param model 模型
+     * @return 会话客户端
+     */
+    @Bean
+    public ChatClient chatClientWithMcp(OllamaChatModel model) {
+        return ChatClient
+                // 创建ChatClient对象，以及设置模型为model
+                .builder(model)
+                .defaultSystem(systemPrompt())
+                .defaultTools(toolCallbackProvider)
                 .build();
     }
 }

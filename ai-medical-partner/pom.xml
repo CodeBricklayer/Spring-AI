@@ -175,6 +175,7 @@
             <version>9.1.0</version>
             <type>pom</type>
         </dependency>
+        <!--MCP客户端依赖-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-client</artifactId>
@@ -184,6 +185,7 @@
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>
         </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>

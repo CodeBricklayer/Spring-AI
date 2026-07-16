@@ -46,4 +46,10 @@ class MedicalAppTest {
     void loadDoc() {
         medicalApp.loadDoc();
     }
+
+    @Test
+    void doChatWithMcp() {
+        String chatId = UUID.randomUUID().toString();
+        System.out.println(medicalApp.doChatWithMcp("找距离中开大厦最近的两个医院？", chatId));
+    }
 }

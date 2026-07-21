@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: old-version-learn-ai
+
+server:
+  port: 8089

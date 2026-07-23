@@ -1,18 +1,104 @@
-# Getting Started
+# 消息类型（Message Type）
 
-### Reference Documentation
+Spring AI 定义了四种标准消息类型，用于构建结构化对话：
 
-For further reference, please consider the following sections:
+| 消息类型 | 作用 | 示例 |
+| --- | --- | --- |
+| SYSTEM | 设定 AI 角色、行为准则和能力边界 | 你是一位 Java 开发专家，只回答编程相关问题 |
+| USER | 用户输入的问题或指令 | 如何实现 Spring AI 的 RAG 知识库？ |
+| ASSISTANT | AI 的历史回复，用于多轮对话上下文 | Spring AI 可以通过 VectorStore 实现知识检索 |
+| TOOL | 工具调用的结果，例如函数执行返回值 | 查询数据库返回的用户信息 |
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/4.1.0/maven-plugin)
-* [Create an OCI image](https://docs.spring.io/spring-boot/4.1.0/maven-plugin/build-image.html)
+---
 
-### Maven Parent overrides
+# 提示词工程基础原则
 
-Due to Maven's design, elements are inherited from the parent POM to the project POM.
-While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the
-parent.
-To prevent this, the project POM contains empty overrides for these elements.
-If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
+有效提示词应包含三个核心要素：
 
+| 要素 | 作用 | 示例 |
+| --- | --- | --- |
+| 角色设定 | 明确 AI 身份和能力范围 | 你是一名资深 Java 架构师，擅长 Spring Boot、Spring Cloud 和微服务设计 |
+| 上下文信息 | 提供任务所需的背景知识 | 当前项目使用 Spring AI 2.0，需要设计一个 RAG 知识库系统 |
+| 清晰指令 | 明确任务目标和输出格式 | 请输出完整的架构设计方案，并使用 Markdown 格式展示 |
+
+---
+
+# 提示词优化技巧
+
+有效优化提示词可以提升 AI 理解能力和输出质量，常用技巧包括：
+
+- **使用分隔符**
+    - 作用：区分不同内容块，帮助模型理解输入结构
+    - 常用分隔符：
+        - 代码块：```
+        - 文本分隔：`---`
+        - 标记分隔：`###`
+
+    - 示例：
+
+        ```text
+        请分析以下代码：
+
+        ```java
+        public class UserService {
+            ...
+        }
+        ```
+        ```
+
+- **设定输出格式**
+    - 作用：约束 AI 输出结构，方便程序解析和使用
+    - 常用格式：
+        - JSON
+        - Markdown
+        - XML
+        - 表格
+
+    - 示例：
+
+        ```text
+        请以 JSON 格式返回用户信息：
+
+        {
+          "name": "",
+          "age": 0
+        }
+        ```
+
+- **控制模型参数**
+    - 作用：调整模型生成内容的随机性和长度
+    - 常用参数：
+        - `temperature`
+            - 控制输出随机性
+            - 范围：0-1
+            - 值越低，输出越稳定；值越高，创造性越强
+
+        - `maxTokens`
+            - 控制最大输出长度
+            - 值越大，允许生成的内容越长
+
+---
+
+# 提示词模板
+
+解决硬编码提示词的复用性和维护性问题，支持：
+
+- 变量替换（使用 `{}` 占位符）
+- 外部文件加载（从 resources 读取模板）
+- 自定义渲染器（如修改分隔符为 `<>`）
+- 系统提示词模板（SystemPromptTemplate）专门用于角色设定
+
+---
+
+# 常用内置 Advisors
+
+| 顾问名称 | 主要作用 | 通俗解释 |
+| --- | --- | --- |
+| MessageChatMemoryAdvisor | 对话记忆 | “记对话”：记住用户最近说了什么，让聊天感觉是连续的 |
+| PromptChatMemoryAdvisor | 提示记忆 | “提炼对话”：把整个聊天记录压缩成一个精炼的提示摘要 |
+| VectorStoreChatMemoryAdvisor | 向量存储记忆 | “模糊知识”：根据用户问题，从向量数据库中找到最相关的历史对话记录 |
+| QuestionAnswerAdvisor | 检索增强生成（RAG） | “查资料”：先在知识库查询相关信息，再把信息增强到 AI 回答问题 |
+| SimpleLoggerAdvisor | 日志记录 | “记录日志”：记录每次请求和响应内容，方便调试和监控 |
+| Semantic Cache Advisor | 语义缓存 | “聪明缓存”：如果遇到意思相同的问题（而不是完全一样），可以直接返回之前缓存的答案，节省算力 |
+| ToolCallAdvisor | 工具调用 | “调用外部工具”：实现 AI 调用外部 API、数据库等能力，通过递归（Recursive）模式完成执行 |
+| GuardrailsAdvisor | 安全护栏 | “安全检查”：在请求发送给 AI 前或 AI 响应返回前拦截不当内容 |

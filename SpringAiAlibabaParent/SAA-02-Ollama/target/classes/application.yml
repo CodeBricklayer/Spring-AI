@@ -1,0 +1,18 @@
+server:
+  port: 9999
+  servlet:
+    encoding:
+      enabled: true
+      force: true
+      charset: UTF-8 # 大模型对话中文乱码处理
+
+spring:
+  application:
+    name: saa-02-ollama
+  ai:
+    dashscope:
+      api-key: ${OPENAI_API_KEY}
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: qwen3.5:4b

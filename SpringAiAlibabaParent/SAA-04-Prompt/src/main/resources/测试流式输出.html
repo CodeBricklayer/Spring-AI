@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<body>
+<div id="content" style="white-space: pre-wrap;font-size:16px;"></div>
+<button onclick="stopChat()">停止对话</button>
+
+<script>
+let source = null;
+const contentDom = document.getElementById("content");
+
+function startChat() {
+    // 先关闭旧连接，防止多个连接并存
+    if (source) {
+        source.close();
+    }
+    contentDom.innerText = "";
+
+    source = new EventSource("http://localhost:8890/ai/prompt/streamChat?question=成都怎么样");
+
+    source.onmessage = function (e) {
+        // 收到结束标识，立刻关闭连接，杜绝自动重连
+        if (e.data === "[DONE]") {
+            source.close();
+            console.log("对话完成，关闭SSE");
+            return;
+        }
+        contentDom.innerHTML += e.data;
+    };
+
+    source.onerror = function () {
+        console.log("连接异常");
+        if (source) {
+            source.close();
+        }
+    };
+}
+
+function stopChat() {
+    if (source) {
+        source.close();
+    }
+}
+
+// 页面加载启动
+startChat();
+
+// 页面刷新/关闭主动释放连接
+window.addEventListener('beforeunload', () => {
+    if (source) source.close();
+})
+</script>
+</body>
+</html>

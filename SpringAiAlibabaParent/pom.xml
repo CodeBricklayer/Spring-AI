@@ -12,6 +12,7 @@
         <module>SAA-01-HelloWorld</module>
         <module>SAA-02-Ollama</module>
         <module>SAA-03-ChatClient</module>
+        <module>SAA-04-Prompt</module>
     </modules>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
